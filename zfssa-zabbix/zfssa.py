@@ -110,6 +110,7 @@ def get_pool_usage(client, pool, type):
 		print rest_error
 		sys.exit()	
 	data2 = data.getdata('pool')['usage'][type]
+		data2 = data.getdata('pool')['usage'][type]
 	print_num(data2)
 	return
 
@@ -124,6 +125,8 @@ def get_project_usage(client, id, type):
 		print rest_error
   	sys.exit()
 	data2 = data.getdata('project')['usage'][type]
+		data2 = data.getdata('project')['usage']['available']/(data.getdata('project')['usage']['total']/100)
+	else:
 	return
 
 def get_share_usage(client, id, type):
@@ -136,6 +139,7 @@ def get_share_usage(client, id, type):
 	except RestException as rest_error:
 		print rest_error
 		sys.exit()
+		data2 = free_space/(data.getdata('filesystem')['quota']/100)    
 	if (type == "total"):
 		print_num(data.getdata('filesystem')['quota'])
 	if (type == "available"):
@@ -174,10 +178,13 @@ if __name__ == "__main__":
 	parser.add_argument('discovery',nargs='*', help="(re)discover pools/projects/shares")
 	parser.add_argument('pool_total',nargs='*', help="pool_total [pool] - pool total space/quota of [pool]")
 	parser.add_argument('pool_available', nargs='*',help="pool_available [pool] - pool free space of [pool]")
+	parser.add_argument('pool_pfree', nargs='*',help="pool_available [pool] - [pool] free %")
 	parser.add_argument('project_total', nargs='*',help="project_total [pool/project] - project total space/quota of [pool/project]")
 	parser.add_argument('share_total', nargs='*',help="share_total [pool/project/share] - pool free space of [pool/project/share]")
 	parser.add_argument('share_available', nargs='*',help="share_available [pool/project/share] - pool free space of [pool/project/share]")
 	parser.add_argument('project_available', nargs='*',help="project_available [pool/project] - pool free space of [pool/project]")
+	parser.add_argument('share_pfree', nargs='*',help="share pfree [pool/project/share] - % free space of [pool/project/share]")
+	parser.add_argument('project_pfree', nargs='*',help="project pfree [pool/project] - % free space of [pool/project]")
 
 	args = parser.parse_args()
 #	print args
