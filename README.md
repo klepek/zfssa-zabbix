@@ -3,14 +3,14 @@ Zabbix template + scripts for ZFS storage appliance monitoring
 
 Tired of SNMP messages from your Oracle ZFS Storage appliance and complicated processing in zabbix?
 
-There is better way, use this fancy template for Zabbix together with few scripts to get some basic monitoring.
+There is better way, use this template for Zabbix together with few scripts to get some basic monitoring.
 
 ## Why to use this?
 - easy to deploy and extend
 
 ## How it works
 
-Luckily, guys at Oracle have REST API and this script uses that
+Luckily, guys at Oracle implemented REST API and this script uses this to obtain data
 
 ## How to:
 
@@ -32,6 +32,8 @@ edit /usr/local/bin/zabbix-zfssa/zfssa.py and set user/password (Sorry, only one
 
 - cpu, caches, etc... utilization
 - HW health
+- replication failures
+- IO operations/analytics datasets
 - user/password per zfs storage
 
 ## Caveats & supported zfssa configs
