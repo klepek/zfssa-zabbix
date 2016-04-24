@@ -21,6 +21,7 @@ UserParameter=zfssa[*],/usr/local/bin/zabbix-zfssa/zfssa.py --host <ip> --action
 UserParameter=oracle_instances.discovery,/bin/cat /etc/zabbix/oracle_instances
 
 `
+
 ## What it can do?
 
 - LLD for pools/projects/shares
@@ -30,9 +31,7 @@ UserParameter=oracle_instances.discovery,/bin/cat /etc/zabbix/oracle_instances
 
 - cpu, caches, etc... utilization
 - HW health
-- 
 
 ## Caveats & supported zfssa configs
 
-- ZFSSA can be configured to failover cluster, without any HA ip adress for management interface, in that case you can put both ips into --host parameter (ie, --host 1.1.1.1,1.1.1.2) the script will try to autodetect "master" and use master for all queries or you can setup ZFSSA to have floating ip adress.
-- 
+- ZFSSA can be configured to failover cluster, without any HA ip adress for management interface, in that case you can put both ips into `--host` parameter (ie, `--host 1.1.1.1,1.1.1.2`) the script will try to autodetect "master" and use master for all queries or you can setup ZFSSA to have floating ip adress.
