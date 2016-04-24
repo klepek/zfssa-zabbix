@@ -21,6 +21,7 @@ UserParameter=zfssa[*],/usr/local/bin/zabbix-zfssa/zfssa.py --host <ip> --action
 UserParameter=oracle_instances.discovery,/bin/cat /etc/zabbix/oracle_instances
 
 `
+edit /usr/local/bin/zabbix-zfssa/zfssa.py and set user/password (Sorry, only one user/password for all monitored storages supported for now)
 
 ## What it can do?
 
@@ -31,6 +32,7 @@ UserParameter=oracle_instances.discovery,/bin/cat /etc/zabbix/oracle_instances
 
 - cpu, caches, etc... utilization
 - HW health
+- user/password per zfs storage
 
 ## Caveats & supported zfssa configs
 
