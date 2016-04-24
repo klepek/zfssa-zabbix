@@ -14,8 +14,8 @@ Luckily, guys at Oracle have REST API and this script uses that
 
 ## How to:
 
-1] choose server which will talk with your ZFSSA storage and copy *.py files into /usr/local/bin/zabbix-zfssa/ (it can be your zabbix server)
-2] add userparameter:
+1. choose server which will talk with your ZFSSA storage and copy *.py files into /usr/local/bin/zabbix-zfssa/ (it can be your zabbix server)
+2. add userparameter:
 `
 UserParameter=zfssa[*],/usr/local/bin/zabbix-zfssa/zfssa.py --host <ip> --action "$1" "$2"
 UserParameter=oracle_instances.discovery,/bin/cat /etc/zabbix/oracle_instances
