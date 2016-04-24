@@ -43,7 +43,7 @@ def find_cluster_owner(cluster):
 			sys.exit()
 
 		if (cluster_state.getdata('cluster')['state'] == "AKCS_OWNER"):
-			print "master found: "+ip
+#			print "master found: "+ip
 			master=ip
 		cl.logout()
 	# check if we found any master
