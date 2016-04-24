@@ -18,7 +18,9 @@ Luckily, guys at Oracle implemented REST API and this script uses this to obtain
 2. add userparameter:
 ```
 UserParameter=zfssa[*],/usr/local/bin/zabbix-zfssa/zfssa.py --host <ip> --action "$1" "$2"
-UserParameter=oracle_instances.discovery,/bin/cat /etc/zabbix/oracle_instances
+UserParameter=zfssa_pools.discovery,/bin/cat /etc/zabbix/zfssa_pool_discovery
+UserParameter=zfssa_projects.discovery,/bin/cat /etc/zabbix/zfssa_project_discovery
+UserParameter=zfssa_shares.discovery,/bin/cat /etc/zabbix/zfssa_share_discovery
 ```
 
 edit /usr/local/bin/zabbix-zfssa/zfssa.py and set user/password (Sorry, only one user/password for all monitored storages supported for now)
@@ -36,6 +38,7 @@ edit /usr/local/bin/zabbix-zfssa/zfssa.py and set user/password (Sorry, only one
 - IO operations/analytics datasets
 - user/password per zfs storage
 
-## Caveats & supported zfssa configs
+## Limitations, Caveats & supported zfssa configs
 
 - ZFSSA can be configured to failover cluster, without any HA ip adress for management interface, in that case you can put both ips into `--host` parameter (ie, `--host 1.1.1.1,1.1.1.2`) the script will try to autodetect "master" and use master for all queries or you can setup ZFSSA to have floating ip adress.
+- only one ZFSSA cluster/host per management station (due to local cache of discovery file)
