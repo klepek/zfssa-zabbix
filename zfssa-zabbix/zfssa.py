@@ -20,7 +20,7 @@ import sys
 import argparse, textwrap
 
 user="rest"
-password="rest"
+password="rest_api"
 zabbix_dir="/etc/zabbix"
 
 def find_cluster_owner(cluster):
@@ -108,8 +108,11 @@ def get_pool_usage(client, pool, type):
 
 	except RestException as rest_error:
 		print rest_error
-		sys.exit()	
-	data2 = data.getdata('pool')['usage'][type]
+		sys.exit()
+	if (type == 'pfree'):
+# calculate percent free
+		data2 = data.getdata('pool')['usage']['available']/(data.getdata('pool')['usage']['total']/100)
+	else:
 		data2 = data.getdata('pool')['usage'][type]
 	print_num(data2)
 	return
@@ -124,9 +127,11 @@ def get_project_usage(client, id, type):
 	except RestException as rest_error:
 		print rest_error
   	sys.exit()
-	data2 = data.getdata('project')['usage'][type]
+	if (type == 'pfree'):
+# calculate percent free                                                                                                                                    
 		data2 = data.getdata('project')['usage']['available']/(data.getdata('project')['usage']['total']/100)
 	else:
+		data2 = data.getdata('project')['usage'][type]
 	return
 
 def get_share_usage(client, id, type):
@@ -139,22 +144,22 @@ def get_share_usage(client, id, type):
 	except RestException as rest_error:
 		print rest_error
 		sys.exit()
+	if (data.getdata('filesystem')['quota_snap'] == "false"):
+		free_space = data.getdata('filesystem')['quota']-data.getdata('filesystem')['space_data']
+	else:
+		free_space = data.getdata('filesystem')['quota']-(data.getdata('filesystem')['space_data']+data.getdata('filesystem')['space_snapshots'])
+	if (type == "pfree"):
 		data2 = free_space/(data.getdata('filesystem')['quota']/100)    
 	if (type == "total"):
 		print_num(data.getdata('filesystem')['quota'])
 	if (type == "available"):
-		if (data.getdata('filesystem')['quota_snap'] == "false"):
-			print_num(data.getdata('filesystem')['space_data'])
-		else:
-			print_num(data.getdata('filesystem')['space_data']+data.getdata('filesystem')['space_snapshots'])
-#	data2 = data.getdata('filesystems')['usage'][type]
-#	print json.dumps(data.getdata('filesystem'))
+		print_num(free_space)
 	return
 
 def build_discovery(client,uid):
-	s = open(zabbix_dir+'/'+uid+'_zfssa_share_discovery','w')
-	pr = open(zabbix_dir+'/'+uid+'_zfssa_project_discovery','w')
-	p = open(zabbix_dir+'/'+uid+'_zfssa_pool_discovery','w')
+	s = open(zabbix_dir+'/zfssa_share_discovery','w')
+	pr = open(zabbix_dir+'/zfssa_project_discovery','w')
+	p = open(zabbix_dir+'/zfssa_pool_discovery','w')
 	pools=get_pools(client)
 	for pool in pools:
 		projects=get_projects(client, pool)	
@@ -229,4 +234,9 @@ if __name__ == "__main__":
 		get_share_usage(client,target,'total')
 	if (action == 'share_available'):
 		get_share_usage(client,target,'available')
+	if (action == 'project_pfree'):
+		get_project_usage(client,target,'pfree')  
+	if (action == 'share_pfree'):                                                                                                                             
+		get_share_usage(client,target,'pfree')
+
 
