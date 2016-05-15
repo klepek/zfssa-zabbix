@@ -1,4 +1,5 @@
-# 	 copyright: Jan Klepek <jan(at)klepek.cz>
+#!/usr/bin/env python
+#    copyright: Jan Klepek <jan(at)klepek.cz>
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
 #    the Free Software Foundation, either version 3 of the License, or
@@ -21,7 +22,8 @@ import argparse, textwrap
 
 user="rest"
 password="rest_api"
-zabbix_dir="/etc/zabbix"
+zabbix_dir="/etc/zabbix/zfssa-zabbix"
+management_host="management-host"
 
 def find_cluster_owner(cluster):
 	master=None
@@ -52,13 +54,19 @@ def find_cluster_owner(cluster):
 
 	return master
 
-def print_num(num):
+def print_zabbix(metric, value):
+#	print metric
+#	print value
+	print management_host+" zfssa["+metric+"] "+str(value)
+	return
+
+def format_num(num):
 	# B -> kB
 	num = num/1024
 	# kB -> MB
 	num = num/1024
-	print('%.2f' % num)
-	return
+#	print('%.2f' % num)
+	return format(num, '.2f')
 
 def get_pools(client):
 
@@ -102,73 +110,136 @@ def get_shares(client, pool, project):
 		ret_sh.append(s['name'])
 	return ret_sh
 
-def get_pool_usage(client, pool, type):
+def get_all_pool_usage(client):
+	pools = get_pools(client)
+	for pool in pools:
+		data = get_pool_usage(client,pool)
+		print_zabbix('pool_pfree,'+pool,data['pfree']);
+		print_zabbix('pool_available,'+pool,format_num(data['available']));
+		print_zabbix('pool_total,'+pool,format_num(data['total']));  
+	return
+
+def get_pool_usage(client, pool):
 	try:
 		data = client.get("/api/storage/v1/pools/%s" % pool,status=Status.OK)
 
 	except RestException as rest_error:
 		print rest_error
 		sys.exit()
-	if (type == 'pfree'):
 # calculate percent free
-		data2 = data.getdata('pool')['usage']['available']/(data.getdata('pool')['usage']['total']/100)
-	else:
-		data2 = data.getdata('pool')['usage'][type]
-	print_num(data2)
+	a={}
+	a['pfree'] = (data.getdata('pool')['usage']['available']/data.getdata('pool')['usage']['total'])*100
+	a['available'] = data.getdata('pool')['usage']['available']
+	a['total'] = data.getdata('pool')['usage']['total']
+	return a
+
+def get_all_project_usage(client):
+	pools = get_pools(client)
+	for pool in pools:
+		projects=get_projects(client, pool)
+		for project in projects:
+			data = get_project_usage(client,pool,project)
+			print_zabbix('project_pfree,'+pool+'/'+project,data['pfree']);
+			print_zabbix('project_available,'+pool+'/'+project,format_num(data['available']));
+			print_zabbix('project_total,'+pool+'/'+project,format_num(data['total']));
 	return
 
-def get_project_usage(client, id, type):
-	pool = id.split("/")[0]
-	project = id.split("/")[1]                                                           
+def get_project_usage(client,pool,project):
+#	pool = id.split("/")[0]
+#	project = id.split("/")[1]                                                           
 	
 	try:
-		data = client.get("/api/storage/v1/pools/%s/projects/%s" % (pool, project) ,status=Status.OK)
+		data2 = client.get("/api/storage/v1/pools/%s/projects/%s" % (pool, project) ,status=Status.OK)
 
 	except RestException as rest_error:
 		print rest_error
-  	sys.exit()
-	if (type == 'pfree'):
-# calculate percent free                                                                                                                                    
-		data2 = data.getdata('project')['usage']['available']/(data.getdata('project')['usage']['total']/100)
+ 	 	sys.exit()
+	#print data2
+	data = data2.getdata('project')
+	if (data['quota'] == 0):
+		quota=data['space_available']
 	else:
-		data2 = data.getdata('project')['usage'][type]
-	return
+		quota=data['quota']
+	free_space = quota-data['space_data']
+	a={}
+	a['pfree'] =(free_space/quota)*100
+	a['available']  = free_space
+	a['total'] = quota
+	return a
 
-def get_share_usage(client, id, type):
-	pool = id.split("/")[0]  
-	project = id.split("/")[1]
-	share = id.split("/")[2]
+def get_all_share_usage(client):
+	pools = get_pools(client)
+	for pool in pools:
+		projects=get_projects(client, pool)
+		for project in projects:
+			shares=get_shares_usage(client, pool, project)
+			for share in shares:
+				print_zabbix('share_pfree,'+pool+'/'+project+'/'+share['name'],share['pfree']);
+				print_zabbix('share_available,'+pool+'/'+project+'/'+share['name'],format_num(share['available']));
+				print_zabbix('share_total,'+pool+'/'+project+'/'+share['name'],format_num(share['total']));
+
+
+
+def get_shares_usage(client, pool,project):
+#	pool = id.split("/")[0]  
+#	project = id.split("/")[1]
+#	share = id.split("/")[2]
 	try:
-		data = client.get("/api/storage/v1/pools/%s/projects/%s/filesystems/%s" % (pool,project,share) ,status=Status.OK)
+		data2 = client.get("/api/storage/v1/pools/%s/projects/%s/filesystems" % (pool,project) ,status=Status.OK)
 
 	except RestException as rest_error:
 		print rest_error
 		sys.exit()
-	if (data.getdata('filesystem')['quota_snap'] == "false"):
-		free_space = data.getdata('filesystem')['quota']-data.getdata('filesystem')['space_data']
-	else:
-		free_space = data.getdata('filesystem')['quota']-(data.getdata('filesystem')['space_data']+data.getdata('filesystem')['space_snapshots'])
-	if (type == "pfree"):
-		data2 = free_space/(data.getdata('filesystem')['quota']/100)    
-	if (type == "total"):
-		print_num(data.getdata('filesystem')['quota'])
-	if (type == "available"):
-		print_num(free_space)
-	return
+	b=[]
+	data3=data2.getdata('filesystems')
+	for data in data3:
+		a={}
+		if (data['quota'] == 0):
+			quota=data['space_available']
+		else:
+			quota=data['quota']
+		if (data['quota_snap'] is False):
+			free_space = quota-data['space_data']
+		else:
+			free_space = quota-(data['space_data']+data['space_snapshots'])
+		a['name'] = data['name']
+		a['pfree'] = (free_space/quota)*100
+		a['total']=quota
+		a['available']=free_space
+		b.append(a)
+	return b
 
 def build_discovery(client,uid):
 	s = open(zabbix_dir+'/zfssa_share_discovery','w')
 	pr = open(zabbix_dir+'/zfssa_project_discovery','w')
 	p = open(zabbix_dir+'/zfssa_pool_discovery','w')
 	pools=get_pools(client)
+	pool_data=[]
+	project_data=[]
+	share_data=[]
 	for pool in pools:
-		projects=get_projects(client, pool)	
-		p.write(pool+"\n")
+		projects=get_projects(client, pool)
+		pool_tmp = {}
+		pool_tmp["{#POOL}"] = pool
+		pool_data.append(pool_tmp) 
 		for project in projects:
 			shares=get_shares(client, pool, project)
-			pr.write(pool+'/'+project+"\n")
+			pr_tmp = {}
+			pr_tmp["{#PROJECT}"] = pool+'/'+project
+			project_data.append(pr_tmp)
+			#pr.write(pool+'/'+project+"\n")
 			for share in shares:
-				s.write(pool+'/'+project+'/'+share+'\n')
+				sh_tmp = {}
+				sh_tmp["{#SHARE}"] = pool+'/'+project+'/'+share
+				share_data.append(sh_tmp)
+				#s.write(pool+'/'+project+'/'+share+'\n')
+	data={}
+	data["data"]=pool_data
+	p.write(json.dumps(data, indent=4))
+	data["data"]=project_data
+	pr.write(json.dumps(data, indent=4))
+	data["data"]=share_data
+	s.write(json.dumps(data, indent=4))
 	s.close()
 	pr.close()
 	p.close()
@@ -181,20 +252,14 @@ if __name__ == "__main__":
 	parser.add_argument("--host", help="ip/hostname of storage device, use two ips separated by comma if your storages have HA cluster", required = True)
 	parser.add_argument("--action",nargs='*', help= "see below")
 	parser.add_argument('discovery',nargs='*', help="(re)discover pools/projects/shares")
-	parser.add_argument('pool_total',nargs='*', help="pool_total [pool] - pool total space/quota of [pool]")
-	parser.add_argument('pool_available', nargs='*',help="pool_available [pool] - pool free space of [pool]")
-	parser.add_argument('pool_pfree', nargs='*',help="pool_available [pool] - [pool] free %")
-	parser.add_argument('project_total', nargs='*',help="project_total [pool/project] - project total space/quota of [pool/project]")
-	parser.add_argument('share_total', nargs='*',help="share_total [pool/project/share] - pool free space of [pool/project/share]")
-	parser.add_argument('share_available', nargs='*',help="share_available [pool/project/share] - pool free space of [pool/project/share]")
-	parser.add_argument('project_available', nargs='*',help="project_available [pool/project] - pool free space of [pool/project]")
-	parser.add_argument('share_pfree', nargs='*',help="share pfree [pool/project/share] - % free space of [pool/project/share]")
-	parser.add_argument('project_pfree', nargs='*',help="project pfree [pool/project] - % free space of [pool/project]")
+	parser.add_argument('all_pool_usage',nargs='*', help="all_pool_data - pool total space/quota of all pools")
+	parser.add_argument('all_project_usage',nargs='*', help="all_project_data - project total space/quota of all projects")
+	parser.add_argument('all_share_usage',nargs='*', help="all_share_data - share total space/quota of all shares")
 
 	args = parser.parse_args()
 #	print args
 	temp=vars(args)
-#	print json.dumps(temp)
+	#print json.dumps(temp)
 	host=temp['host']
 # check if we have two hosts or not
 	cluster=host.split(',')
@@ -210,7 +275,8 @@ if __name__ == "__main__":
 			print "unable to find cluster master"
 			sys.exit()
 	action=temp['action'][0]
-	target = host
+	if (len(temp['action'])>1):
+		target = temp['action'][1]
 
 # connect to zfssa master host
 	client = RestClient(host)
@@ -222,21 +288,9 @@ if __name__ == "__main__":
 	
 	if (action == "discovery"):
 		build_discovery(client,uid)
-	if (action == 'pool_total'):
-		get_pool_usage(client,target,'total')
-	if (action == 'pool_available'):
-		get_pool_usage(client,target,'available')
-	if (action == 'project_total'):
-		get_project_usage(client,target,'total')  
-	if (action == 'project_available'):
-		get_project_usage(client,target,'available')  
-	if (action == 'share_total'):
-		get_share_usage(client,target,'total')
-	if (action == 'share_available'):
-		get_share_usage(client,target,'available')
-	if (action == 'project_pfree'):
-		get_project_usage(client,target,'pfree')  
-	if (action == 'share_pfree'):                                                                                                                             
-		get_share_usage(client,target,'pfree')
-
-
+	if (action == "all_pool_usage"):
+		get_all_pool_usage(client)
+	if (action == "all_project_usage"):
+		get_all_project_usage(client)
+	if (action == "all_share_usage"):
+		get_all_share_usage(client)
