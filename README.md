@@ -21,9 +21,7 @@ UserParameter=zfssa_pools.discovery,/bin/cat /etc/zabbix/zfssa_pool_discovery
 UserParameter=zfssa_projects.discovery,/bin/cat /etc/zabbix/zfssa_project_discovery
 UserParameter=zfssa_shares.discovery,/bin/cat /etc/zabbix/zfssa_share_discovery
 ```
-
 edit /usr/local/bin/zabbix-zfssa/zfssa.py and set user/password (Sorry, only one user/password for all monitored storages supported for now) and set management host to hostname which is set in zabbix.
-
 3. set crontab
 ```
 0 * * * * /usr/local/bin/zabbix-zfssa/zfssa.py --host <storage> --action all_pool_usage | zabbix_sender -i - -z <ip> > /dev/null 2>&1
