@@ -31,6 +31,7 @@ edit /usr/local/bin/zabbix-zfssa/zfssa.py and set user/password (Sorry, only one
 0 * * * * /usr/local/bin/zabbix-zfssa/zfssa.py --host <storage> --action all_project_usage | zabbix_sender -i - -z <ip> > /dev/null 2>&1
 0 0 * * * /usr/local/bin/zabbix-zfssa/zfssa.py --host <storage> --action discovery
 ```
+4. import template and assign it to management host
 
 ## What it can do?
 
