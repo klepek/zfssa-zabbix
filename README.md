@@ -14,22 +14,24 @@ Luckily, guys at Oracle implemented REST API and this script uses this to obtain
 
 ## How to:
 
-1. choose server which will talk with your ZFSSA storage and copy *.py files into /usr/local/bin/zabbix-zfssa/ (it can be your zabbix server)
-2. add userparameter:
+1] choose server which will talk with your ZFSSA storage and copy *.py files into /usr/local/bin/zabbix-zfssa/ (it can be your zabbix server)
+
+2] add userparameter:
 ```
 UserParameter=zfssa_pools.discovery,/bin/cat /etc/zabbix/zfssa_pool_discovery
 UserParameter=zfssa_projects.discovery,/bin/cat /etc/zabbix/zfssa_project_discovery
 UserParameter=zfssa_shares.discovery,/bin/cat /etc/zabbix/zfssa_share_discovery
 ```
 edit /usr/local/bin/zabbix-zfssa/zfssa.py and set user/password (Sorry, only one user/password for all monitored storages supported for now) and set management host to hostname which is set in zabbix.
-3. set crontab
+
+3] set crontab
 ```
 0 * * * * /usr/local/bin/zabbix-zfssa/zfssa.py --host <storage> --action all_pool_usage | zabbix_sender -i - -z <ip> > /dev/null 2>&1
 */10 * * * * /usr/local/bin/zabbix-zfssa/zfssa.py --host <storage> --action all_share_usage | zabbix_sender -i - -z <ip> > /dev/null 2>&1
 0 * * * * /usr/local/bin/zabbix-zfssa/zfssa.py --host <storage> --action all_project_usage | zabbix_sender -i - -z <ip> > /dev/null 2>&1
 0 0 * * * /usr/local/bin/zabbix-zfssa/zfssa.py --host <storage> --action discovery
 ```
-4. import template and assign it to management host
+4] import template and assign it to management host
 
 ## What it can do?
 
