@@ -24,12 +24,13 @@ UserParameter=zfssa_shares.discovery,/bin/cat /etc/zabbix/zfssa_share_discovery
 ```
 edit /usr/local/bin/zabbix-zfssa/zfssa.py and set user/password (Sorry, only one user/password for all monitored storages supported for now) and set management host to hostname which is set in zabbix.
 
-3] set crontab
+3] set crontab (replace <storage> and <zabbix-ip> with your values)
 ```
-0 * * * * /usr/local/bin/zabbix-zfssa/zfssa.py --host <storage> --action all_pool_usage | zabbix_sender -i - -z <ip> > /dev/null 2>&1
-*/10 * * * * /usr/local/bin/zabbix-zfssa/zfssa.py --host <storage> --action all_share_usage | zabbix_sender -i - -z <ip> > /dev/null 2>&1
-0 * * * * /usr/local/bin/zabbix-zfssa/zfssa.py --host <storage> --action all_project_usage | zabbix_sender -i - -z <ip> > /dev/null 2>&1
+0 * * * * /usr/local/bin/zabbix-zfssa/zfssa.py --host <storage> --action all_pool_usage | zabbix_sender -i - -z <zabbix-ip> > /dev/null 2>&1
+*/10 * * * * /usr/local/bin/zabbix-zfssa/zfssa.py --host <storage> --action all_share_usage | zabbix_sender -i - -z <zabbix-ip> > /dev/null 2>&1
+0 * * * * /usr/local/bin/zabbix-zfssa/zfssa.py --host <storage> --action all_project_usage | zabbix_sender -i - -z <zabbix-ip> > /dev/null 2>&1
 0 0 * * * /usr/local/bin/zabbix-zfssa/zfssa.py --host <storage> --action discovery
+0 * * * * /usr/local/bin/zabbix-zfssa/zfssa.py --host <storage> --action hw_status | zabbix_sender -i - -z <zabbix-ip> > /dev/null 2>&1
 ```
 4] import template and assign it to management host
 
