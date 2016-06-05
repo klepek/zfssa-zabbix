@@ -14,8 +14,8 @@ Luckily, guys at Oracle implemented REST API and this script uses this to obtain
 
 ## How to:
 
-1. choose server which will talk with your ZFSSA storage and copy *.py files into /usr/local/bin/zabbix-zfssa/ (it can be your zabbix server)
-2. setup cron  (replace <storage> and <zabbix-ip> with your values):
+1] choose server which will talk with your ZFSSA storage and copy *.py files into /usr/local/bin/zabbix-zfssa/ (it can be your zabbix server)
+2] setup cron  (replace <storage> and <zabbix-ip> with your values):
 ```
 0 * * * * /usr/local/bin/zabbix-zfssa/zfssa.py --host <storage> --action all_pool_usage | zabbix_sender -i - -z <zabbix-ip> > /dev/null 2>&1
 */10 * * * * /usr/local/bin/zabbix-zfssa/zfssa.py --host <storage> --action all_share_usage | zabbix_sender -i - -z <zabbix-ip> > /dev/null 2>&1
@@ -24,7 +24,7 @@ Luckily, guys at Oracle implemented REST API and this script uses this to obtain
 0 * * * * /usr/local/bin/zabbix-zfssa/zfssa.py --host <storage> --action hw_status | zabbix_sender -i - -z <zabbix-ip> > /dev/null 2>&1
 0 0 * * * /usr/local/bin/zabbix-zfssa/zfssa.py --host <storage> --action replication_status | zabbix_sender -i - -z <zabbix-ip> > /dev/null 2>&1
 ```
-3. add userparameter:
+3] add userparameter:
 ```
 UserParameter=zfssa_pools.discovery,/bin/cat /etc/zabbix/zfssa_pool_discovery
 UserParameter=zfssa_projects.discovery,/bin/cat /etc/zabbix/zfssa_project_discovery
