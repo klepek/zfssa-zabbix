@@ -178,7 +178,48 @@ def get_all_share_usage(client):
 				print_zabbix('share_available,'+pool+'/'+project+'/'+share['name'],format_num(share['available']));
 				print_zabbix('share_total,'+pool+'/'+project+'/'+share['name'],format_num(share['total']));
 
+def get_replica_status(client, id):
+	try:
+		data2 = client.get("/api/storage/v1/replication/actions/%s" % id,status=Status.OK)
+	except RestException as rest_error:
+		print rest_error
+		sys.exit()
+	data3=data2.getdata('action')
+	if data3['enabled']:
+		if data3['last_result']=="success":
+			return "0"
+		else:
+			return "1"
+	else:
+	# disabled replication, consider as ok
+			return "0"
+	return 
 
+def get_replication_status(client, discovery=0):
+	try:
+		data2 = client.get("/api/storage/v1/replication/actions",status=Status.OK)
+
+	except RestException as rest_error:
+		print rest_error
+		sys.exit()
+	data3=data2.getdata('actions')
+	b=[]
+	for data in data3:
+		path = None
+		if data.has_key("pool"):
+			path=data['pool']
+		if data.has_key("project"):
+			path=path+"/"+data['project']
+		if data.has_key("share"):
+			path=path+"/"+data['share']
+		if (discovery==0):
+			status = get_replica_status(client, data['id'])
+			print_zabbix('replication_status,'+path,status)
+		else:
+			b.append(path)
+	if (discovery==1):
+		return b
+	return
 
 def get_shares_usage(client, pool,project):
 #	pool = id.split("/")[0]  
@@ -209,14 +250,32 @@ def get_shares_usage(client, pool,project):
 		b.append(a)
 	return b
 
+def get_hw_status(client):
+	try:
+		data2 = client.get("/api/hardware/v1/chassis" ,status=Status.OK)
+
+	except RestException as rest_error:
+		print rest_error
+		sys.exit()
+	data3=data2.getdata('chassis')
+	fault=0
+	for data in data3:
+		if (data['faulted'] is True):
+			fault+=1
+		print_zabbix('hw_fault',fault)
+	return
+
 def build_discovery(client,uid):
 	s = open(zabbix_dir+'/zfssa_share_discovery','w')
 	pr = open(zabbix_dir+'/zfssa_project_discovery','w')
 	p = open(zabbix_dir+'/zfssa_pool_discovery','w')
+	r = open(zabbix_dir+'/zfssa_replica_discovery','w')
+
 	pools=get_pools(client)
 	pool_data=[]
 	project_data=[]
 	share_data=[]
+	replica_data=[]
 	for pool in pools:
 		projects=get_projects(client, pool)
 		pool_tmp = {}
@@ -240,9 +299,17 @@ def build_discovery(client,uid):
 	pr.write(json.dumps(data, indent=4))
 	data["data"]=share_data
 	s.write(json.dumps(data, indent=4))
+	dt2 = get_replication_status(client, 1)
+	for dt in dt2:
+		dt_temp = {}
+		dt_temp["{#REPLICA}"] = dt
+		replica_data.append(dt_temp)
+	data["data"]=replica_data
+	r.write(json.dumps(data, indent=4))
 	s.close()
 	pr.close()
 	p.close()
+	r.close()
 	return
 
 if __name__ == "__main__":
@@ -255,6 +322,8 @@ if __name__ == "__main__":
 	parser.add_argument('all_pool_usage',nargs='*', help="all_pool_data - pool total space/quota of all pools")
 	parser.add_argument('all_project_usage',nargs='*', help="all_project_data - project total space/quota of all projects")
 	parser.add_argument('all_share_usage',nargs='*', help="all_share_data - share total space/quota of all shares")
+	parser.add_argument('hw_status',nargs='*', help="get any hw fault")
+	parser.add_argument('replication_status',nargs='*', help="get replication statuses")
 
 	args = parser.parse_args()
 #	print args
@@ -294,3 +363,8 @@ if __name__ == "__main__":
 		get_all_project_usage(client)
 	if (action == "all_share_usage"):
 		get_all_share_usage(client)
+	if (action == "replication_status"):
+		get_replication_status(client)
+	if (action == "hw_status"):
+		get_hw_status(client)
+
