@@ -624,7 +624,7 @@
                             <snmp_community/>
                             <multiplier>0</multiplier>
                             <snmp_oid/>
-                            <key>zfssa[project_available,{#REPLICA}]</key>
+                            <key>zfssa[replication_status,{#REPLICA}]</key>
                             <delay>0</delay>
                             <history>90</history>
                             <trends>365</trends>
