@@ -26,6 +26,7 @@ Luckily, guys at Oracle implemented REST API and this script uses this to obtain
 ```
 3] add userparameter:
 ```
+UserParameter=zfssa[*],/usr/local/bin/zabbix-zfssa/zfssa.py --host 1.1.1.1 --action "$1" "$2"
 UserParameter=zfssa_pools.discovery,/bin/cat /etc/zabbix/zfssa_pool_discovery
 UserParameter=zfssa_projects.discovery,/bin/cat /etc/zabbix/zfssa_project_discovery
 UserParameter=zfssa_shares.discovery,/bin/cat /etc/zabbix/zfssa_share_discovery
