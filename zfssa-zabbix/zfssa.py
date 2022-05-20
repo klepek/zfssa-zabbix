@@ -262,7 +262,7 @@ def get_hw_status(client):
 	for data in data3:
 		if (data['faulted'] is True):
 			fault+=1
-		print_zabbix('hw_fault',fault)
+	print_zabbix('hw_fault',fault)
 	return
 
 def build_discovery(client,uid):
