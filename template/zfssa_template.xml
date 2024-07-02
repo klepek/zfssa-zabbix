@@ -1,319 +1,144 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <zabbix_export>
-    <version>2.0</version>
-    <date>2016-06-05T12:03:54Z</date>
+    <version>6.0</version>
+    <date>2024-07-02T11:06:13Z</date>
     <groups>
         <group>
+            <uuid>7df96b18c230490a9a0a9e2307226338</uuid>
             <name>Templates</name>
         </group>
     </groups>
     <templates>
         <template>
+            <uuid>90f0e947306249f0b0a46e736795dbca</uuid>
             <template>ZFSSA storage template</template>
             <name>ZFSSA storage template</name>
-            <description/>
             <groups>
                 <group>
                     <name>Templates</name>
                 </group>
             </groups>
-            <applications>
-                <application>
-                    <name>HW</name>
-                </application>
-                <application>
-                    <name>Pool</name>
-                </application>
-                <application>
-                    <name>Project</name>
-                </application>
-                <application>
-                    <name>Replica</name>
-                </application>
-                <application>
-                    <name>Share</name>
-                </application>
-            </applications>
             <items>
                 <item>
+                    <uuid>4b0e50770db5426aa21e584f4641f7f8</uuid>
                     <name>Number of HW faults</name>
-                    <type>2</type>
-                    <snmp_community/>
-                    <multiplier>0</multiplier>
-                    <snmp_oid/>
+                    <type>TRAP</type>
                     <key>zfssa[hw_fault]</key>
                     <delay>0</delay>
-                    <history>30</history>
-                    <trends>90</trends>
-                    <status>0</status>
-                    <value_type>3</value_type>
-                    <allowed_hosts/>
-                    <units/>
-                    <delta>0</delta>
-                    <snmpv3_contextname/>
-                    <snmpv3_securityname/>
-                    <snmpv3_securitylevel>0</snmpv3_securitylevel>
-                    <snmpv3_authprotocol>0</snmpv3_authprotocol>
-                    <snmpv3_authpassphrase/>
-                    <snmpv3_privprotocol>0</snmpv3_privprotocol>
-                    <snmpv3_privpassphrase/>
-                    <formula>1</formula>
-                    <delay_flex/>
-                    <params/>
-                    <ipmi_sensor/>
-                    <data_type>0</data_type>
-                    <authtype>0</authtype>
-                    <username/>
-                    <password/>
-                    <publickey/>
-                    <privatekey/>
-                    <port/>
-                    <description/>
-                    <inventory_link>0</inventory_link>
-                    <applications>
-                        <application>
-                            <name>HW</name>
-                        </application>
-                    </applications>
-                    <valuemap/>
-                    <logtimefmt/>
+                    <history>30d</history>
+                    <trends>90d</trends>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>HW</value>
+                        </tag>
+                    </tags>
+                    <triggers>
+                        <trigger>
+                            <uuid>b7cd9bf242b64d5397fe82f0cf7cc900</uuid>
+                            <expression>last(/ZFSSA storage template/zfssa[hw_fault])&gt;0</expression>
+                            <name>HW fault detected</name>
+                            <priority>HIGH</priority>
+                        </trigger>
+                    </triggers>
                 </item>
             </items>
             <discovery_rules>
                 <discovery_rule>
+                    <uuid>e126539436c242e0abffcc3157ff5000</uuid>
                     <name>Pool discovery</name>
-                    <type>0</type>
-                    <snmp_community/>
-                    <snmp_oid/>
                     <key>zfssa_pools.discovery</key>
                     <delay>300</delay>
-                    <status>0</status>
-                    <allowed_hosts/>
-                    <snmpv3_contextname/>
-                    <snmpv3_securityname/>
-                    <snmpv3_securitylevel>0</snmpv3_securitylevel>
-                    <snmpv3_authprotocol>0</snmpv3_authprotocol>
-                    <snmpv3_authpassphrase/>
-                    <snmpv3_privprotocol>0</snmpv3_privprotocol>
-                    <snmpv3_privpassphrase/>
-                    <delay_flex/>
-                    <params/>
-                    <ipmi_sensor/>
-                    <authtype>0</authtype>
-                    <username/>
-                    <password/>
-                    <publickey/>
-                    <privatekey/>
-                    <port/>
                     <filter>
-                        <evaltype>0</evaltype>
-                        <formula/>
                         <conditions>
                             <condition>
                                 <macro>{#POOL}</macro>
-                                <value/>
-                                <operator>8</operator>
                                 <formulaid>A</formulaid>
                             </condition>
                         </conditions>
                     </filter>
-                    <lifetime>1</lifetime>
-                    <description/>
+                    <lifetime>1d</lifetime>
                     <item_prototypes>
                         <item_prototype>
+                            <uuid>6f129b99e42c4d85999144ae753995ac</uuid>
                             <name>Pool available space on pool {#POOL}</name>
-                            <type>2</type>
-                            <snmp_community/>
-                            <multiplier>0</multiplier>
-                            <snmp_oid/>
+                            <type>TRAP</type>
                             <key>zfssa[pool_available,{#POOL}]</key>
                             <delay>0</delay>
-                            <history>90</history>
-                            <trends>365</trends>
-                            <status>0</status>
-                            <value_type>0</value_type>
-                            <allowed_hosts/>
+                            <value_type>FLOAT</value_type>
                             <units>MB</units>
-                            <delta>0</delta>
-                            <snmpv3_contextname/>
-                            <snmpv3_securityname/>
-                            <snmpv3_securitylevel>0</snmpv3_securitylevel>
-                            <snmpv3_authprotocol>0</snmpv3_authprotocol>
-                            <snmpv3_authpassphrase/>
-                            <snmpv3_privprotocol>0</snmpv3_privprotocol>
-                            <snmpv3_privpassphrase/>
-                            <formula>1</formula>
-                            <delay_flex/>
-                            <params/>
-                            <ipmi_sensor/>
-                            <data_type>0</data_type>
-                            <authtype>0</authtype>
-                            <username/>
-                            <password/>
-                            <publickey/>
-                            <privatekey/>
-                            <port/>
-                            <description/>
-                            <inventory_link>0</inventory_link>
-                            <applications>
-                                <application>
-                                    <name>Pool</name>
-                                </application>
-                            </applications>
-                            <valuemap/>
-                            <logtimefmt/>
+                            <tags>
+                                <tag>
+                                    <tag>Application</tag>
+                                    <value>Pool</value>
+                                </tag>
+                            </tags>
                         </item_prototype>
                         <item_prototype>
+                            <uuid>1c2bd1ed467346739b26bfd36ee93c05</uuid>
                             <name>Pool free space % on Pool {#POOL}</name>
-                            <type>2</type>
-                            <snmp_community/>
-                            <multiplier>0</multiplier>
-                            <snmp_oid/>
+                            <type>TRAP</type>
                             <key>zfssa[pool_pfree,{#POOL}]</key>
                             <delay>0</delay>
-                            <history>90</history>
-                            <trends>365</trends>
-                            <status>0</status>
-                            <value_type>0</value_type>
-                            <allowed_hosts/>
+                            <value_type>FLOAT</value_type>
                             <units>%</units>
-                            <delta>0</delta>
-                            <snmpv3_contextname/>
-                            <snmpv3_securityname/>
-                            <snmpv3_securitylevel>0</snmpv3_securitylevel>
-                            <snmpv3_authprotocol>0</snmpv3_authprotocol>
-                            <snmpv3_authpassphrase/>
-                            <snmpv3_privprotocol>0</snmpv3_privprotocol>
-                            <snmpv3_privpassphrase/>
-                            <formula>1</formula>
-                            <delay_flex/>
-                            <params/>
-                            <ipmi_sensor/>
-                            <data_type>0</data_type>
-                            <authtype>0</authtype>
-                            <username/>
-                            <password/>
-                            <publickey/>
-                            <privatekey/>
-                            <port/>
-                            <description/>
-                            <inventory_link>0</inventory_link>
-                            <applications>
-                                <application>
-                                    <name>Pool</name>
-                                </application>
-                            </applications>
-                            <valuemap/>
-                            <logtimefmt/>
+                            <tags>
+                                <tag>
+                                    <tag>Application</tag>
+                                    <value>Pool</value>
+                                </tag>
+                            </tags>
+                            <trigger_prototypes>
+                                <trigger_prototype>
+                                    <uuid>5c66d39cdef54b849f4e4f7b86a331ba</uuid>
+                                    <expression>nodata(/ZFSSA storage template/zfssa[pool_pfree,{#POOL}],190m)=1</expression>
+                                    <name>Pool (#POOL) data was not updated in last 190 minutes</name>
+                                    <priority>HIGH</priority>
+                                    <description>Pool data was not updated in last 190 minutes, please check data collector</description>
+                                </trigger_prototype>
+                                <trigger_prototype>
+                                    <uuid>669a2788f6dc4943bd2cb0b3414a9215</uuid>
+                                    <expression>last(/ZFSSA storage template/zfssa[pool_pfree,{#POOL}])&lt;{$POOL_FREE_HIGH}</expression>
+                                    <name>Pool free space is below {$POOL_FREE_HIGH}% on Pool {#POOL}</name>
+                                    <priority>HIGH</priority>
+                                </trigger_prototype>
+                                <trigger_prototype>
+                                    <uuid>f50bf70f36784a1ca99f2a4bed16620b</uuid>
+                                    <expression>last(/ZFSSA storage template/zfssa[pool_pfree,{#POOL}])&lt;{$POOL_FREE_LOW}</expression>
+                                    <name>Pool free space is below {$POOL_FREE_LOW}% on Pool {#POOL}</name>
+                                    <priority>WARNING</priority>
+                                </trigger_prototype>
+                                <trigger_prototype>
+                                    <uuid>ea2dd7a17dd84de3abc174c6e9340813</uuid>
+                                    <expression>last(/ZFSSA storage template/zfssa[pool_pfree,{#POOL}])&lt;{$POOL_FREE_MED}</expression>
+                                    <name>Pool free space is below {$POOL_FREE_MED}% on Pool {#POOL}</name>
+                                    <priority>AVERAGE</priority>
+                                </trigger_prototype>
+                            </trigger_prototypes>
                         </item_prototype>
                         <item_prototype>
+                            <uuid>b8252802854d48cb8a786de53d81aa50</uuid>
                             <name>Pool total space on Pool {#POOL}</name>
-                            <type>2</type>
-                            <snmp_community/>
-                            <multiplier>0</multiplier>
-                            <snmp_oid/>
+                            <type>TRAP</type>
                             <key>zfssa[pool_total,{#POOL}]</key>
                             <delay>0</delay>
-                            <history>90</history>
-                            <trends>365</trends>
-                            <status>0</status>
-                            <value_type>0</value_type>
-                            <allowed_hosts/>
+                            <value_type>FLOAT</value_type>
                             <units>MB</units>
-                            <delta>0</delta>
-                            <snmpv3_contextname/>
-                            <snmpv3_securityname/>
-                            <snmpv3_securitylevel>0</snmpv3_securitylevel>
-                            <snmpv3_authprotocol>0</snmpv3_authprotocol>
-                            <snmpv3_authpassphrase/>
-                            <snmpv3_privprotocol>0</snmpv3_privprotocol>
-                            <snmpv3_privpassphrase/>
-                            <formula>1</formula>
-                            <delay_flex/>
-                            <params/>
-                            <ipmi_sensor/>
-                            <data_type>0</data_type>
-                            <authtype>0</authtype>
-                            <username/>
-                            <password/>
-                            <publickey/>
-                            <privatekey/>
-                            <port/>
-                            <description/>
-                            <inventory_link>0</inventory_link>
-                            <applications>
-                                <application>
-                                    <name>Pool</name>
-                                </application>
-                            </applications>
-                            <valuemap/>
-                            <logtimefmt/>
+                            <tags>
+                                <tag>
+                                    <tag>Application</tag>
+                                    <value>Pool</value>
+                                </tag>
+                            </tags>
                         </item_prototype>
                     </item_prototypes>
-                    <trigger_prototypes>
-                        <trigger_prototype>
-                            <expression>{ZFSSA storage template:zfssa[pool_pfree,{#POOL}].nodata(190m)}=1</expression>
-                            <name>Pool (#POOL) data was not updated in last 190 minutes</name>
-                            <url/>
-                            <status>0</status>
-                            <priority>4</priority>
-                            <description>Pool data was not updated in last 190 minutes, please check data collector</description>
-                            <type>0</type>
-                        </trigger_prototype>
-                        <trigger_prototype>
-                            <expression>{ZFSSA storage template:zfssa[pool_pfree,{#POOL}].last()}&lt;{$POOL_FREE_HIGH}</expression>
-                            <name>Pool free space is below {$POOL_FREE_HIGH}% on Pool {#POOL}</name>
-                            <url/>
-                            <status>0</status>
-                            <priority>4</priority>
-                            <description/>
-                            <type>0</type>
-                        </trigger_prototype>
-                        <trigger_prototype>
-                            <expression>{ZFSSA storage template:zfssa[pool_pfree,{#POOL}].last()}&lt;{$POOL_FREE_LOW}</expression>
-                            <name>Pool free space is below {$POOL_FREE_LOW}% on Pool {#POOL}</name>
-                            <url/>
-                            <status>0</status>
-                            <priority>2</priority>
-                            <description/>
-                            <type>0</type>
-                        </trigger_prototype>
-                        <trigger_prototype>
-                            <expression>{ZFSSA storage template:zfssa[pool_pfree,{#POOL}].last()}&lt;{$POOL_FREE_MED}</expression>
-                            <name>Pool free space is below {$POOL_FREE_MED}% on Pool {#POOL}</name>
-                            <url/>
-                            <status>0</status>
-                            <priority>3</priority>
-                            <description/>
-                            <type>0</type>
-                        </trigger_prototype>
-                    </trigger_prototypes>
                     <graph_prototypes>
                         <graph_prototype>
+                            <uuid>d3666dac70d94fb6b8408dde98acc251</uuid>
                             <name>Pool space usage on Pool {#POOL}</name>
-                            <width>900</width>
-                            <height>200</height>
-                            <yaxismin>0.0000</yaxismin>
-                            <yaxismax>100.0000</yaxismax>
-                            <show_work_period>1</show_work_period>
-                            <show_triggers>1</show_triggers>
-                            <type>0</type>
-                            <show_legend>1</show_legend>
-                            <show_3d>0</show_3d>
-                            <percent_left>0.0000</percent_left>
-                            <percent_right>0.0000</percent_right>
-                            <ymin_type_1>0</ymin_type_1>
-                            <ymax_type_1>0</ymax_type_1>
-                            <ymin_item_1>0</ymin_item_1>
-                            <ymax_item_1>0</ymax_item_1>
                             <graph_items>
                                 <graph_item>
-                                    <sortorder>0</sortorder>
-                                    <drawtype>0</drawtype>
                                     <color>00C800</color>
-                                    <yaxisside>0</yaxisside>
-                                    <calc_fnc>2</calc_fnc>
-                                    <type>0</type>
                                     <item>
                                         <host>ZFSSA storage template</host>
                                         <key>zfssa[pool_available,{#POOL}]</key>
@@ -321,11 +146,7 @@
                                 </graph_item>
                                 <graph_item>
                                     <sortorder>1</sortorder>
-                                    <drawtype>0</drawtype>
                                     <color>C80000</color>
-                                    <yaxisside>0</yaxisside>
-                                    <calc_fnc>2</calc_fnc>
-                                    <type>0</type>
                                     <item>
                                         <host>ZFSSA storage template</host>
                                         <key>zfssa[pool_total,{#POOL}]</key>
@@ -334,235 +155,94 @@
                             </graph_items>
                         </graph_prototype>
                     </graph_prototypes>
-                    <host_prototypes/>
                 </discovery_rule>
                 <discovery_rule>
+                    <uuid>850c88e5ecc44d6ebc203aa476f62e48</uuid>
                     <name>Project discovery</name>
-                    <type>0</type>
-                    <snmp_community/>
-                    <snmp_oid/>
                     <key>zfssa_projects.discovery</key>
                     <delay>300</delay>
-                    <status>0</status>
-                    <allowed_hosts/>
-                    <snmpv3_contextname/>
-                    <snmpv3_securityname/>
-                    <snmpv3_securitylevel>0</snmpv3_securitylevel>
-                    <snmpv3_authprotocol>0</snmpv3_authprotocol>
-                    <snmpv3_authpassphrase/>
-                    <snmpv3_privprotocol>0</snmpv3_privprotocol>
-                    <snmpv3_privpassphrase/>
-                    <delay_flex/>
-                    <params/>
-                    <ipmi_sensor/>
-                    <authtype>0</authtype>
-                    <username/>
-                    <password/>
-                    <publickey/>
-                    <privatekey/>
-                    <port/>
-                    <filter>
-                        <evaltype>0</evaltype>
-                        <formula/>
-                        <conditions/>
-                    </filter>
-                    <lifetime>1</lifetime>
-                    <description/>
+                    <lifetime>1d</lifetime>
                     <item_prototypes>
                         <item_prototype>
+                            <uuid>2f4833c6db4143599af6e37bc24ee952</uuid>
                             <name>Project available space on Project {#PROJECT}</name>
-                            <type>2</type>
-                            <snmp_community/>
-                            <multiplier>0</multiplier>
-                            <snmp_oid/>
+                            <type>TRAP</type>
                             <key>zfssa[project_available,{#PROJECT}]</key>
                             <delay>0</delay>
-                            <history>90</history>
-                            <trends>365</trends>
-                            <status>0</status>
-                            <value_type>0</value_type>
-                            <allowed_hosts/>
+                            <value_type>FLOAT</value_type>
                             <units>MB</units>
-                            <delta>0</delta>
-                            <snmpv3_contextname/>
-                            <snmpv3_securityname/>
-                            <snmpv3_securitylevel>0</snmpv3_securitylevel>
-                            <snmpv3_authprotocol>0</snmpv3_authprotocol>
-                            <snmpv3_authpassphrase/>
-                            <snmpv3_privprotocol>0</snmpv3_privprotocol>
-                            <snmpv3_privpassphrase/>
-                            <formula>1</formula>
-                            <delay_flex/>
-                            <params/>
-                            <ipmi_sensor/>
-                            <data_type>0</data_type>
-                            <authtype>0</authtype>
-                            <username/>
-                            <password/>
-                            <publickey/>
-                            <privatekey/>
-                            <port/>
-                            <description/>
-                            <inventory_link>0</inventory_link>
-                            <applications>
-                                <application>
-                                    <name>Project</name>
-                                </application>
-                            </applications>
-                            <valuemap/>
-                            <logtimefmt/>
+                            <tags>
+                                <tag>
+                                    <tag>Application</tag>
+                                    <value>Project</value>
+                                </tag>
+                            </tags>
                         </item_prototype>
                         <item_prototype>
+                            <uuid>643583b1323246598883dd485b9126df</uuid>
                             <name>Project free space % on Project {#PROJECT}</name>
-                            <type>2</type>
-                            <snmp_community/>
-                            <multiplier>0</multiplier>
-                            <snmp_oid/>
+                            <type>TRAP</type>
                             <key>zfssa[project_pfree,{#PROJECT}]</key>
                             <delay>0</delay>
-                            <history>90</history>
-                            <trends>365</trends>
-                            <status>0</status>
-                            <value_type>0</value_type>
-                            <allowed_hosts/>
+                            <value_type>FLOAT</value_type>
                             <units>%</units>
-                            <delta>0</delta>
-                            <snmpv3_contextname/>
-                            <snmpv3_securityname/>
-                            <snmpv3_securitylevel>0</snmpv3_securitylevel>
-                            <snmpv3_authprotocol>0</snmpv3_authprotocol>
-                            <snmpv3_authpassphrase/>
-                            <snmpv3_privprotocol>0</snmpv3_privprotocol>
-                            <snmpv3_privpassphrase/>
-                            <formula>1</formula>
-                            <delay_flex/>
-                            <params/>
-                            <ipmi_sensor/>
-                            <data_type>0</data_type>
-                            <authtype>0</authtype>
-                            <username/>
-                            <password/>
-                            <publickey/>
-                            <privatekey/>
-                            <port/>
-                            <description/>
-                            <inventory_link>0</inventory_link>
-                            <applications>
-                                <application>
-                                    <name>Project</name>
-                                </application>
-                            </applications>
-                            <valuemap/>
-                            <logtimefmt/>
+                            <tags>
+                                <tag>
+                                    <tag>Application</tag>
+                                    <value>Project</value>
+                                </tag>
+                            </tags>
+                            <trigger_prototypes>
+                                <trigger_prototype>
+                                    <uuid>4b8ade3ab0b747ec8d41a5d02c3715c6</uuid>
+                                    <expression>nodata(/ZFSSA storage template/zfssa[project_pfree,{#PROJECT}],190m)=1</expression>
+                                    <name>Project (#PROJECT) data was not updated in last 190 minutes</name>
+                                    <priority>HIGH</priority>
+                                </trigger_prototype>
+                                <trigger_prototype>
+                                    <uuid>eeb30014d2584d26bddf7412ce45cd3d</uuid>
+                                    <expression>last(/ZFSSA storage template/zfssa[project_pfree,{#PROJECT}])&lt;{$PROJECT_FREE_HIGH}</expression>
+                                    <name>Project free space is below {$PROJECT_FREE_HIGH}% on Project {#PROJECT}</name>
+                                    <priority>HIGH</priority>
+                                </trigger_prototype>
+                                <trigger_prototype>
+                                    <uuid>b713909e19854532a8dacb99826f1b2b</uuid>
+                                    <expression>last(/ZFSSA storage template/zfssa[project_pfree,{#PROJECT}])&lt;{$PROJECT_FREE_LOW}</expression>
+                                    <name>Project free space is below {$PROJECT_FREE_LOW}% on Project {#PROJECT}</name>
+                                    <priority>WARNING</priority>
+                                </trigger_prototype>
+                                <trigger_prototype>
+                                    <uuid>bf6b0e201cc146d291ffd20a585929d9</uuid>
+                                    <expression>last(/ZFSSA storage template/zfssa[project_pfree,{#PROJECT}])&lt;{$PROJECT_FREE_MED}</expression>
+                                    <name>Project free space is below {$PROJECT_FREE_MED}% on Project {#PROJECT}</name>
+                                    <priority>AVERAGE</priority>
+                                </trigger_prototype>
+                            </trigger_prototypes>
                         </item_prototype>
                         <item_prototype>
+                            <uuid>bfdd3a7af8464c4f9f7414d3c8e77e2e</uuid>
                             <name>Project total space on Project {#PROJECT}</name>
-                            <type>2</type>
-                            <snmp_community/>
-                            <multiplier>0</multiplier>
-                            <snmp_oid/>
+                            <type>TRAP</type>
                             <key>zfssa[project_total,{#PROJECT}]</key>
                             <delay>0</delay>
-                            <history>90</history>
-                            <trends>365</trends>
-                            <status>0</status>
-                            <value_type>0</value_type>
-                            <allowed_hosts/>
+                            <value_type>FLOAT</value_type>
                             <units>MB</units>
-                            <delta>0</delta>
-                            <snmpv3_contextname/>
-                            <snmpv3_securityname/>
-                            <snmpv3_securitylevel>0</snmpv3_securitylevel>
-                            <snmpv3_authprotocol>0</snmpv3_authprotocol>
-                            <snmpv3_authpassphrase/>
-                            <snmpv3_privprotocol>0</snmpv3_privprotocol>
-                            <snmpv3_privpassphrase/>
-                            <formula>1</formula>
-                            <delay_flex/>
-                            <params/>
-                            <ipmi_sensor/>
-                            <data_type>0</data_type>
-                            <authtype>0</authtype>
-                            <username/>
-                            <password/>
-                            <publickey/>
-                            <privatekey/>
-                            <port/>
-                            <description/>
-                            <inventory_link>0</inventory_link>
-                            <applications>
-                                <application>
-                                    <name>Project</name>
-                                </application>
-                            </applications>
-                            <valuemap/>
-                            <logtimefmt/>
+                            <tags>
+                                <tag>
+                                    <tag>Application</tag>
+                                    <value>Project</value>
+                                </tag>
+                            </tags>
                         </item_prototype>
                     </item_prototypes>
-                    <trigger_prototypes>
-                        <trigger_prototype>
-                            <expression>{ZFSSA storage template:zfssa[project_pfree,{#PROJECT}].nodata(190m)}=1</expression>
-                            <name>Project (#PROJECT) data was not updated in last 190 minutes</name>
-                            <url/>
-                            <status>0</status>
-                            <priority>4</priority>
-                            <description/>
-                            <type>0</type>
-                        </trigger_prototype>
-                        <trigger_prototype>
-                            <expression>{ZFSSA storage template:zfssa[project_pfree,{#PROJECT}].last()}&lt;{$PROJECT_FREE_HIGH}</expression>
-                            <name>Project free space is below {$PROJECT_FREE_HIGH}% on Project {#PROJECT}</name>
-                            <url/>
-                            <status>0</status>
-                            <priority>4</priority>
-                            <description/>
-                            <type>0</type>
-                        </trigger_prototype>
-                        <trigger_prototype>
-                            <expression>{ZFSSA storage template:zfssa[project_pfree,{#PROJECT}].last()}&lt;{$PROJECT_FREE_LOW}</expression>
-                            <name>Project free space is below {$PROJECT_FREE_LOW}% on Project {#PROJECT}</name>
-                            <url/>
-                            <status>0</status>
-                            <priority>2</priority>
-                            <description/>
-                            <type>0</type>
-                        </trigger_prototype>
-                        <trigger_prototype>
-                            <expression>{ZFSSA storage template:zfssa[project_pfree,{#PROJECT}].last()}&lt;{$PROJECT_FREE_MED}</expression>
-                            <name>Project free space is below {$PROJECT_FREE_MED}% on Project {#PROJECT}</name>
-                            <url/>
-                            <status>0</status>
-                            <priority>3</priority>
-                            <description/>
-                            <type>0</type>
-                        </trigger_prototype>
-                    </trigger_prototypes>
                     <graph_prototypes>
                         <graph_prototype>
+                            <uuid>6c7ab8e843874bc2864901479745539d</uuid>
                             <name>Project space usage on Project {#PROJECT}</name>
-                            <width>900</width>
-                            <height>200</height>
-                            <yaxismin>0.0000</yaxismin>
-                            <yaxismax>100.0000</yaxismax>
-                            <show_work_period>1</show_work_period>
-                            <show_triggers>1</show_triggers>
-                            <type>1</type>
-                            <show_legend>1</show_legend>
-                            <show_3d>0</show_3d>
-                            <percent_left>0.0000</percent_left>
-                            <percent_right>0.0000</percent_right>
-                            <ymin_type_1>0</ymin_type_1>
-                            <ymax_type_1>0</ymax_type_1>
-                            <ymin_item_1>0</ymin_item_1>
-                            <ymax_item_1>0</ymax_item_1>
+                            <type>STACKED</type>
                             <graph_items>
                                 <graph_item>
-                                    <sortorder>0</sortorder>
-                                    <drawtype>0</drawtype>
                                     <color>00C800</color>
-                                    <yaxisside>0</yaxisside>
-                                    <calc_fnc>2</calc_fnc>
-                                    <type>0</type>
                                     <item>
                                         <host>ZFSSA storage template</host>
                                         <key>zfssa[project_available,{#PROJECT}]</key>
@@ -570,11 +250,7 @@
                                 </graph_item>
                                 <graph_item>
                                     <sortorder>1</sortorder>
-                                    <drawtype>0</drawtype>
                                     <color>C80000</color>
-                                    <yaxisside>0</yaxisside>
-                                    <calc_fnc>2</calc_fnc>
-                                    <type>0</type>
                                     <item>
                                         <host>ZFSSA storage template</host>
                                         <key>zfssa[project_total,{#PROJECT}]</key>
@@ -583,333 +259,131 @@
                             </graph_items>
                         </graph_prototype>
                     </graph_prototypes>
-                    <host_prototypes/>
                 </discovery_rule>
                 <discovery_rule>
+                    <uuid>64bb43a7339a4b269c21242aacbd9379</uuid>
                     <name>Replication discovery</name>
-                    <type>0</type>
-                    <snmp_community/>
-                    <snmp_oid/>
                     <key>zfssa_replica.discovery</key>
                     <delay>300</delay>
-                    <status>0</status>
-                    <allowed_hosts/>
-                    <snmpv3_contextname/>
-                    <snmpv3_securityname/>
-                    <snmpv3_securitylevel>0</snmpv3_securitylevel>
-                    <snmpv3_authprotocol>0</snmpv3_authprotocol>
-                    <snmpv3_authpassphrase/>
-                    <snmpv3_privprotocol>0</snmpv3_privprotocol>
-                    <snmpv3_privpassphrase/>
-                    <delay_flex/>
-                    <params/>
-                    <ipmi_sensor/>
-                    <authtype>0</authtype>
-                    <username/>
-                    <password/>
-                    <publickey/>
-                    <privatekey/>
-                    <port/>
-                    <filter>
-                        <evaltype>0</evaltype>
-                        <formula/>
-                        <conditions/>
-                    </filter>
-                    <lifetime>30</lifetime>
-                    <description/>
                     <item_prototypes>
                         <item_prototype>
+                            <uuid>1b179ef007834c2f8811f6e83940e220</uuid>
                             <name>Replication status {#REPLICA}</name>
-                            <type>2</type>
-                            <snmp_community/>
-                            <multiplier>0</multiplier>
-                            <snmp_oid/>
+                            <type>TRAP</type>
                             <key>zfssa[replication_status,{#REPLICA}]</key>
                             <delay>0</delay>
-                            <history>90</history>
-                            <trends>365</trends>
-                            <status>0</status>
-                            <value_type>3</value_type>
-                            <allowed_hosts/>
-                            <units/>
-                            <delta>0</delta>
-                            <snmpv3_contextname/>
-                            <snmpv3_securityname/>
-                            <snmpv3_securitylevel>0</snmpv3_securitylevel>
-                            <snmpv3_authprotocol>0</snmpv3_authprotocol>
-                            <snmpv3_authpassphrase/>
-                            <snmpv3_privprotocol>0</snmpv3_privprotocol>
-                            <snmpv3_privpassphrase/>
-                            <formula>1</formula>
-                            <delay_flex/>
-                            <params/>
-                            <ipmi_sensor/>
-                            <data_type>0</data_type>
-                            <authtype>0</authtype>
-                            <username/>
-                            <password/>
-                            <publickey/>
-                            <privatekey/>
-                            <port/>
-                            <description/>
-                            <inventory_link>0</inventory_link>
-                            <applications>
-                                <application>
-                                    <name>Replica</name>
-                                </application>
-                            </applications>
-                            <valuemap/>
-                            <logtimefmt/>
+                            <tags>
+                                <tag>
+                                    <tag>Application</tag>
+                                    <value>Replica</value>
+                                </tag>
+                            </tags>
+                            <trigger_prototypes>
+                                <trigger_prototype>
+                                    <uuid>1e48293c23d34454ac95296c30e34a93</uuid>
+                                    <expression>last(/ZFSSA storage template/zfssa[replication_status,{#REPLICA}])=1</expression>
+                                    <name>Replication {#REPLICA} failed</name>
+                                    <priority>HIGH</priority>
+                                </trigger_prototype>
+                            </trigger_prototypes>
                         </item_prototype>
                     </item_prototypes>
-                    <trigger_prototypes>
-                        <trigger_prototype>
-                            <expression>{ZFSSA storage template:zfssa[project_available,{#REPLICA}].last()}=1</expression>
-                            <name>Replication {#REPLICA} failed</name>
-                            <url/>
-                            <status>0</status>
-                            <priority>4</priority>
-                            <description/>
-                            <type>0</type>
-                        </trigger_prototype>
-                    </trigger_prototypes>
-                    <graph_prototypes/>
-                    <host_prototypes/>
                 </discovery_rule>
                 <discovery_rule>
+                    <uuid>eef4a1965fe2449c9b8381fc70b7bf90</uuid>
                     <name>Share discovery</name>
-                    <type>0</type>
-                    <snmp_community/>
-                    <snmp_oid/>
                     <key>zfssa_shares.discovery</key>
                     <delay>300</delay>
-                    <status>0</status>
-                    <allowed_hosts/>
-                    <snmpv3_contextname/>
-                    <snmpv3_securityname/>
-                    <snmpv3_securitylevel>0</snmpv3_securitylevel>
-                    <snmpv3_authprotocol>0</snmpv3_authprotocol>
-                    <snmpv3_authpassphrase/>
-                    <snmpv3_privprotocol>0</snmpv3_privprotocol>
-                    <snmpv3_privpassphrase/>
-                    <delay_flex/>
-                    <params/>
-                    <ipmi_sensor/>
-                    <authtype>0</authtype>
-                    <username/>
-                    <password/>
-                    <publickey/>
-                    <privatekey/>
-                    <port/>
                     <filter>
-                        <evaltype>0</evaltype>
-                        <formula/>
                         <conditions>
                             <condition>
                                 <macro>{#SHARE}</macro>
-                                <value/>
-                                <operator>8</operator>
                                 <formulaid>A</formulaid>
                             </condition>
                         </conditions>
                     </filter>
-                    <lifetime>1</lifetime>
-                    <description/>
+                    <lifetime>1d</lifetime>
                     <item_prototypes>
                         <item_prototype>
+                            <uuid>966d2919353d4f08975de6f7ed502c91</uuid>
                             <name>Share available space on share {#SHARE}</name>
-                            <type>2</type>
-                            <snmp_community/>
-                            <multiplier>0</multiplier>
-                            <snmp_oid/>
+                            <type>TRAP</type>
                             <key>zfssa[share_available,{#SHARE}]</key>
                             <delay>0</delay>
-                            <history>90</history>
-                            <trends>365</trends>
-                            <status>0</status>
-                            <value_type>0</value_type>
-                            <allowed_hosts/>
+                            <value_type>FLOAT</value_type>
                             <units>MB</units>
-                            <delta>0</delta>
-                            <snmpv3_contextname/>
-                            <snmpv3_securityname/>
-                            <snmpv3_securitylevel>0</snmpv3_securitylevel>
-                            <snmpv3_authprotocol>0</snmpv3_authprotocol>
-                            <snmpv3_authpassphrase/>
-                            <snmpv3_privprotocol>0</snmpv3_privprotocol>
-                            <snmpv3_privpassphrase/>
-                            <formula>1</formula>
-                            <delay_flex/>
-                            <params/>
-                            <ipmi_sensor/>
-                            <data_type>0</data_type>
-                            <authtype>0</authtype>
-                            <username/>
-                            <password/>
-                            <publickey/>
-                            <privatekey/>
-                            <port/>
-                            <description/>
-                            <inventory_link>0</inventory_link>
-                            <applications>
-                                <application>
-                                    <name>Share</name>
-                                </application>
-                            </applications>
-                            <valuemap/>
-                            <logtimefmt/>
+                            <tags>
+                                <tag>
+                                    <tag>Application</tag>
+                                    <value>Share</value>
+                                </tag>
+                            </tags>
                         </item_prototype>
                         <item_prototype>
+                            <uuid>7f5ae557bcb1435681b3b09a3f0f3569</uuid>
                             <name>Share free space % on Share {#SHARE}</name>
-                            <type>2</type>
-                            <snmp_community/>
-                            <multiplier>0</multiplier>
-                            <snmp_oid/>
+                            <type>TRAP</type>
                             <key>zfssa[share_pfree,{#SHARE}]</key>
                             <delay>0</delay>
-                            <history>90</history>
-                            <trends>365</trends>
-                            <status>0</status>
-                            <value_type>0</value_type>
-                            <allowed_hosts/>
+                            <value_type>FLOAT</value_type>
                             <units>%</units>
-                            <delta>0</delta>
-                            <snmpv3_contextname/>
-                            <snmpv3_securityname/>
-                            <snmpv3_securitylevel>0</snmpv3_securitylevel>
-                            <snmpv3_authprotocol>0</snmpv3_authprotocol>
-                            <snmpv3_authpassphrase/>
-                            <snmpv3_privprotocol>0</snmpv3_privprotocol>
-                            <snmpv3_privpassphrase/>
-                            <formula>1</formula>
-                            <delay_flex/>
-                            <params/>
-                            <ipmi_sensor/>
-                            <data_type>0</data_type>
-                            <authtype>0</authtype>
-                            <username/>
-                            <password/>
-                            <publickey/>
-                            <privatekey/>
-                            <port/>
-                            <description/>
-                            <inventory_link>0</inventory_link>
-                            <applications>
-                                <application>
-                                    <name>Share</name>
-                                </application>
-                            </applications>
-                            <valuemap/>
-                            <logtimefmt/>
+                            <tags>
+                                <tag>
+                                    <tag>Application</tag>
+                                    <value>Share</value>
+                                </tag>
+                            </tags>
+                            <trigger_prototypes>
+                                <trigger_prototype>
+                                    <uuid>a31a4b0567e94d30a4590a5f11859470</uuid>
+                                    <expression>nodata(/ZFSSA storage template/zfssa[share_pfree,{#SHARE}],30m)=1</expression>
+                                    <name>Share (#SHARE) data was not updated in last 30 minutes</name>
+                                    <priority>HIGH</priority>
+                                </trigger_prototype>
+                                <trigger_prototype>
+                                    <uuid>4c7535b07df0403a8ed1c1fa92e6226b</uuid>
+                                    <expression>last(/ZFSSA storage template/zfssa[share_pfree,{#SHARE}])&lt;{$POOL_FREE_HIGH}</expression>
+                                    <name>Share free space is below {$POOL_FREE_HIGH}% on Share {#SHARE}</name>
+                                    <priority>HIGH</priority>
+                                </trigger_prototype>
+                                <trigger_prototype>
+                                    <uuid>9de8493b18fd4d4db0408309b893c555</uuid>
+                                    <expression>last(/ZFSSA storage template/zfssa[share_pfree,{#SHARE}])&lt;{$POOL_FREE_LOW}</expression>
+                                    <name>Share free space is below {$POOL_FREE_LOW}% on Share {#SHARE}</name>
+                                    <priority>WARNING</priority>
+                                </trigger_prototype>
+                                <trigger_prototype>
+                                    <uuid>cd4eae25340242cfbd6fb75bc021ba39</uuid>
+                                    <expression>last(/ZFSSA storage template/zfssa[share_pfree,{#SHARE}])&lt;{$POOL_FREE_MED}</expression>
+                                    <name>Share free space is below {$POOL_FREE_MED}% on Share {#SHARE}</name>
+                                    <priority>AVERAGE</priority>
+                                </trigger_prototype>
+                            </trigger_prototypes>
                         </item_prototype>
                         <item_prototype>
+                            <uuid>137c2b1ff89a4f54a614a0cfaf4e57b8</uuid>
                             <name>Share total space on share {#SHARE}</name>
-                            <type>2</type>
-                            <snmp_community/>
-                            <multiplier>0</multiplier>
-                            <snmp_oid/>
+                            <type>TRAP</type>
                             <key>zfssa[share_total,{#SHARE}]</key>
                             <delay>0</delay>
-                            <history>90</history>
-                            <trends>365</trends>
-                            <status>0</status>
-                            <value_type>0</value_type>
-                            <allowed_hosts/>
+                            <value_type>FLOAT</value_type>
                             <units>MB</units>
-                            <delta>0</delta>
-                            <snmpv3_contextname/>
-                            <snmpv3_securityname/>
-                            <snmpv3_securitylevel>0</snmpv3_securitylevel>
-                            <snmpv3_authprotocol>0</snmpv3_authprotocol>
-                            <snmpv3_authpassphrase/>
-                            <snmpv3_privprotocol>0</snmpv3_privprotocol>
-                            <snmpv3_privpassphrase/>
-                            <formula>1</formula>
-                            <delay_flex/>
-                            <params/>
-                            <ipmi_sensor/>
-                            <data_type>0</data_type>
-                            <authtype>0</authtype>
-                            <username/>
-                            <password/>
-                            <publickey/>
-                            <privatekey/>
-                            <port/>
-                            <description/>
-                            <inventory_link>0</inventory_link>
-                            <applications>
-                                <application>
-                                    <name>Share</name>
-                                </application>
-                            </applications>
-                            <valuemap/>
-                            <logtimefmt/>
+                            <tags>
+                                <tag>
+                                    <tag>Application</tag>
+                                    <value>Share</value>
+                                </tag>
+                            </tags>
                         </item_prototype>
                     </item_prototypes>
-                    <trigger_prototypes>
-                        <trigger_prototype>
-                            <expression>{ZFSSA storage template:zfssa[share_pfree,{#SHARE}].nodata(30m)}=1</expression>
-                            <name>Share (#SHARE) data was not updated in last 30 minutes</name>
-                            <url/>
-                            <status>0</status>
-                            <priority>4</priority>
-                            <description/>
-                            <type>0</type>
-                        </trigger_prototype>
-                        <trigger_prototype>
-                            <expression>{ZFSSA storage template:zfssa[share_pfree,{#SHARE}].last()}&lt;{$POOL_FREE_HIGH}</expression>
-                            <name>Share free space is below {$POOL_FREE_HIGH}% on Share {#SHARE}</name>
-                            <url/>
-                            <status>0</status>
-                            <priority>4</priority>
-                            <description/>
-                            <type>0</type>
-                        </trigger_prototype>
-                        <trigger_prototype>
-                            <expression>{ZFSSA storage template:zfssa[share_pfree,{#SHARE}].last()}&lt;{$POOL_FREE_LOW}</expression>
-                            <name>Share free space is below {$POOL_FREE_LOW}% on Share {#SHARE}</name>
-                            <url/>
-                            <status>0</status>
-                            <priority>2</priority>
-                            <description/>
-                            <type>0</type>
-                        </trigger_prototype>
-                        <trigger_prototype>
-                            <expression>{ZFSSA storage template:zfssa[share_pfree,{#SHARE}].last()}&lt;{$POOL_FREE_MED}</expression>
-                            <name>Share free space is below {$POOL_FREE_MED}% on Share {#SHARE}</name>
-                            <url/>
-                            <status>0</status>
-                            <priority>3</priority>
-                            <description/>
-                            <type>0</type>
-                        </trigger_prototype>
-                    </trigger_prototypes>
                     <graph_prototypes>
                         <graph_prototype>
+                            <uuid>90b4d457fb4142388e791ca2175c8026</uuid>
                             <name>Share space usage on Share {#SHARE}</name>
-                            <width>900</width>
-                            <height>200</height>
-                            <yaxismin>0.0000</yaxismin>
-                            <yaxismax>100.0000</yaxismax>
-                            <show_work_period>1</show_work_period>
-                            <show_triggers>1</show_triggers>
-                            <type>1</type>
-                            <show_legend>1</show_legend>
-                            <show_3d>0</show_3d>
-                            <percent_left>0.0000</percent_left>
-                            <percent_right>0.0000</percent_right>
-                            <ymin_type_1>0</ymin_type_1>
-                            <ymax_type_1>0</ymax_type_1>
-                            <ymin_item_1>0</ymin_item_1>
-                            <ymax_item_1>0</ymax_item_1>
+                            <type>STACKED</type>
                             <graph_items>
                                 <graph_item>
-                                    <sortorder>0</sortorder>
-                                    <drawtype>0</drawtype>
                                     <color>C80000</color>
-                                    <yaxisside>0</yaxisside>
-                                    <calc_fnc>2</calc_fnc>
-                                    <type>0</type>
                                     <item>
                                         <host>ZFSSA storage template</host>
                                         <key>zfssa[share_total,{#SHARE}]</key>
@@ -917,11 +391,7 @@
                                 </graph_item>
                                 <graph_item>
                                     <sortorder>1</sortorder>
-                                    <drawtype>0</drawtype>
                                     <color>00C800</color>
-                                    <yaxisside>0</yaxisside>
-                                    <calc_fnc>2</calc_fnc>
-                                    <type>0</type>
                                     <item>
                                         <host>ZFSSA storage template</host>
                                         <key>zfssa[share_available,{#SHARE}]</key>
@@ -930,7 +400,6 @@
                             </graph_items>
                         </graph_prototype>
                     </graph_prototypes>
-                    <host_prototypes/>
                 </discovery_rule>
             </discovery_rules>
             <macros>
@@ -971,20 +440,6 @@
                     <value>10</value>
                 </macro>
             </macros>
-            <templates/>
-            <screens/>
         </template>
     </templates>
-    <triggers>
-        <trigger>
-            <expression>{ZFSSA storage template:zfssa[hw_fault].last()}&gt;0</expression>
-            <name>HW fault detected</name>
-            <url/>
-            <status>0</status>
-            <priority>4</priority>
-            <description/>
-            <type>0</type>
-            <dependencies/>
-        </trigger>
-    </triggers>
 </zabbix_export>
